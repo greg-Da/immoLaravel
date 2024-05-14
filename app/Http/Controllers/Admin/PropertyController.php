@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PropertyFormRequest;
 use App\Models\City;
-use Illuminate\Http\Request;
 use App\Models\Property;
 
 class PropertyController extends Controller
