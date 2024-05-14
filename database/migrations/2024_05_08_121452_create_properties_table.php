@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->longText('description');
+            $table->integer('surface');
+            $table->integer('nmbRoom');
+            $table->integer('nmbBedroom');
+            $table->integer('floorCount');
+            $table->integer('price');
+            $table->string('address');
+            $table->string('zipCode');
+            $table->boolean('sold');
             $table->timestamps();
         });
     }
