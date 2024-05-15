@@ -33,6 +33,7 @@ class PropertyFormRequest extends FormRequest
             'zipCode' => ['required', 'string'],
             'sold' => ['required', 'boolean'],
             'city_id' => ['required', 'integer', 'exists:cities,id'],
+            'options' => ['array', 'exists:options,id']
         ];
     }
 }

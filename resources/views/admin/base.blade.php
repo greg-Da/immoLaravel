@@ -13,17 +13,52 @@
 </head>
 
 <body>
+
+    @php
+        $route = request()->route()->getName();
+    @endphp
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Agence</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a @class(['nav-link', 'active' => str_contains($route, 'property.')]) href="{{ route('admin.property.index') }}">Propriétés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @class(['nav-link', 'active' => str_contains($route, 'city.')]) href="{{ route('admin.city.index') }}">Villes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @class(['nav-link', 'active' => str_contains($route, 'option.')]) href="{{ route('admin.option.index') }}">Options</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
     <div class="container mt-5">
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
-        @if (session('error'))
+        @if ($errors->any())
             <div class="alert alert-danger">
-                {{ session('error') }}
+                <ul class="my-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+
             </div>
         @endif
+
 
         @yield('content')
     </div>

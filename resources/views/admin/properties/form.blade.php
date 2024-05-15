@@ -92,33 +92,47 @@
                     'value' => $property->zipCode,
                 ])
 
+
+            </div>
+
+            <div class="row">
+
                 @include('shared.select', [
                     'class' => 'col',
                     'label' => 'Ville',
                     'name' => 'city_id',
                     'options' => $cities,
                     'placeholder' => 'Choisir une ville',
-                    'optionValue' => 'id',
-                    'optionDisplay' => 'name',
-                    'defaultValue' => $property->city_id
+                    'defaultValue' => $property->city_id,
+                ])
+
+                @include('shared.select', [
+                    'class' => 'col',
+                    'multiple' => true,
+                    'name' => 'options',
+                    'options' => $options,
+                    'defaultValue' => $property->options()->pluck('id'),
                 ])
             </div>
+        </div>
 
-            @include('shared.switch', [
-                'label' => 'Vendu',
-                'name' => 'sold',
-                'value' => $property->sold,
-            ])
 
-            <div>
-                <button class="btn btn-primary">
-                    @if ($property->exists)
-                        Modifier
-                    @else
-                        Créer
-                    @endif
-                </button>
-            </div>
+        @include('shared.switch', [
+            'label' => 'Vendu',
+            'name' => 'sold',
+            'value' => $property->sold,
+        ])
+
+        <div>
+            <button class="btn btn-primary">
+                @if ($property->exists)
+                    Modifier
+                @else
+                    Créer
+                @endif
+            </button>
+        </div>
+
     </form>
 
 @endsection

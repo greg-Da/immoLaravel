@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PropertyFormRequest;
 use App\Models\City;
+use App\Models\Option;
 use App\Models\Property;
 
 class PropertyController extends Controller
@@ -21,13 +22,15 @@ class PropertyController extends Controller
     {
         return view('admin.properties.form', [
             'property' => new Property(),
-            'cities' => City::all()
+            'cities' => City::pluck('name', 'id'),
+            'options' => Option::pluck('name', 'id')
         ]);
     }
 
     public function store(PropertyFormRequest $request)
     {
         $property = Property::create($request->validated());
+        $property->options()->sync($request->validated(('options')));
         return to_route('admin.property.index')->with('success', 'Bien créé');
     }
 
@@ -36,12 +39,14 @@ class PropertyController extends Controller
     {
         return view('admin.properties.form', [
             'property' => $property,
-            'cities' => City::all()
+            'cities' => City::pluck('name', 'id'),
+            'options' => Option::pluck('name', 'id')
         ]);
     }
 
     public function update(PropertyFormRequest $request, Property $property)
     {
+        $property->options()->sync($request->validated(('options')));
         $property->update($request->validated());
         return to_route('admin.property.index')->with('success', 'Bien édité');
     }
@@ -50,8 +55,6 @@ class PropertyController extends Controller
     {
         if ($property->delete()) {
             return to_route('admin.property.index')->with('success', 'Bien supprimé');
-        }else{
-            return to_route('admin.property.index')->with('error', 'Une erreur est survenue');
         }
     }
 }
