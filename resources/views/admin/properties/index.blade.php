@@ -25,7 +25,7 @@
 
                     <td>{{ $property->title }}</td>
                     <td>{{ $property->surface }}m2</td>
-                    <td>{{ number_format($property->price, thousands_separator: '  ') }}</td>
+                    <td>{{ $property->getFormattedPrice() }}</td>
                     <td>{{ $property->city->name }}</td>
                     <td>
                         <div class="d-flex justify-content-end w-100 gap-2">

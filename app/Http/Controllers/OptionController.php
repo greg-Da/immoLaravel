@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\OptionFormRequest;
+use App\Http\Requests\OptionFormRequest;
 use App\Models\Option;
 
 class OptionController extends Controller

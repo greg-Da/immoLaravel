@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CityFormRequest;
+use App\Http\Requests\CityFormRequest;
 use App\Models\City;
 
 class CityController extends Controller

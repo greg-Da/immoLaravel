@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OptionFormRequest extends FormRequest
+class PropertyContactRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,11 @@ class OptionFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
+            'firstName' => ['required', 'string'],
+            'lastName' => ['required', 'string'],
+            'phone' => ['required', 'string', 'min:10'],
+            'email' => ['required', 'string', 'min:4'],
+            'message' => ['required', 'string', 'min:5'],
         ];
     }
 }
