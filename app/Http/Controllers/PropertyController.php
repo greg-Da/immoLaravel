@@ -9,8 +9,10 @@ use App\Http\Requests\SearchPropertiesRequest;
 use App\Mail\PropertyContactMail;
 use App\Models\City;
 use App\Models\Option;
+use App\Models\Picture;
 use App\Models\Property;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
@@ -46,7 +48,7 @@ class PropertyController extends Controller
             }
         }
 
-        if($request->validated('title')){
+        if ($request->validated('title')) {
             $query = $query->where('title', 'like', "%{$request->validated('title')}%");
         }
 
@@ -60,7 +62,7 @@ class PropertyController extends Controller
     public function show(string $slug, Property $property)
     {
         $expectedSlug = $property->getSlug();
-        if($slug === $expectedSlug){
+        if ($slug === $expectedSlug) {
             return view('public.properties.show', [
                 'slug' => $expectedSlug,
                 'property' => $property,
@@ -72,7 +74,8 @@ class PropertyController extends Controller
         ]);
     }
 
-    public function contact(Property $property ,PropertyContactRequest $request){
+    public function contact(Property $property, PropertyContactRequest $request)
+    {
         Mail::send(new PropertyContactMail($property, $request->validated()));
         return back()->with('success', 'Message envoye');
     }
@@ -104,6 +107,10 @@ class PropertyController extends Controller
     {
         $property = Property::create($request->validated());
         $property->options()->sync($request->validated(('options')));
+        if ($request->validated('pictures')) {
+            $property->attachFiles($request->validated('pictures'));
+        }
+
         return to_route('admin.property.index')->with('success', 'Bien créé');
     }
 
@@ -120,12 +127,22 @@ class PropertyController extends Controller
     public function update(PropertyFormRequest $request, Property $property)
     {
         $property->options()->sync($request->validated(('options')));
+        if ($request->validated('pictures')) {
+            $property->attachFiles($request->validated('pictures'));
+        }
         $property->update($request->validated());
         return to_route('admin.property.index')->with('success', 'Bien édité');
     }
 
     public function destroy(Property $property)
     {
+        Picture::destroy($property->pictures()->pluck('id'));
+        $directoryPath = 'public/properties/' . $property->id;
+
+        if (Storage::exists($directoryPath)) {
+            Storage::deleteDirectory($directoryPath);
+        }
+
         if ($property->delete()) {
             return to_route('admin.property.index')->with('success', 'Bien supprimé');
         }

@@ -33,7 +33,10 @@ class PropertyFormRequest extends FormRequest
             'zipCode' => ['required', 'string'],
             'sold' => ['required', 'boolean'],
             'city_id' => ['required', 'integer', 'exists:cities,id'],
-            'options' => ['array', 'exists:options,id']
+            'options' => ['array', 'exists:options,id'],
+            'pictures' => ['array'],
+            // VALIDATE ELEMENTS OF THE PICTURES ARRAY
+            'pictures.*' => ['image', 'max:2000', 'mimes:jpeg,png,jpg']
         ];
     }
 }

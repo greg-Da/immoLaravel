@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Property extends Model
@@ -35,6 +36,30 @@ class Property extends Model
         return number_format($this->price, thousands_separator: '  ') . '€';
     }
 
+    public function getPicture(): ?Picture{
+        return $this->pictures[0] ?? null;
+    }
+
+    /**
+     * @param UploadedFile[] $files
+     */
+    public function attachFiles(array $files){
+        $pictures = [];
+        foreach($files as $file){
+            if($file->getError()){
+                continue;
+            }
+            $filename = $file->store('properties/' . $this->id, 'public');
+            $pictures[] = [
+                'filename' => $filename
+            ];
+        }
+
+        if(count($pictures) > 0){
+            $this->pictures()->createMany(($pictures));
+        }
+    }
+
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
@@ -43,5 +68,10 @@ class Property extends Model
     public function options(): BelongsToMany
     {
         return $this->belongsToMany(Option::class);
+    }
+
+    public function pictures(): HasMany
+    {
+        return $this->hasMany(Picture::class);
     }
 }

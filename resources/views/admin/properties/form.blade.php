@@ -8,7 +8,8 @@
     <h1>@yield('title')</h1>
 
     <form class='vstack gap-2'
-        action="{{ route($property->exists ? 'admin.property.update' : 'admin.property.store', $property) }}" method="post">
+        action="{{ route($property->exists ? 'admin.property.update' : 'admin.property.store', $property) }}" method="post"
+        enctype="multipart/form-data">
 
         @csrf
         @method($property->exists ? 'put' : 'post')
@@ -115,6 +116,25 @@
                 ])
             </div>
         </div>
+
+        <div>
+            <div class="row">
+                @foreach ($property->pictures as $picture)
+                    <div id="picture{{$picture->id}}" class="col-2 position-relative">
+                        <img src="{{ $picture->getImageUrl() }}" alt="" class="w-100">
+                        <button hx-delete='{{route('admin.picture.destroy', $picture)}}' hx-swap='delete' hx-target='#picture{{$picture->id}}' class="btn btn-danger rounded-circle position-absolute top-0 end-0">X</button>
+                    </div>
+                @endforeach
+            </div>
+
+            @include('shared.upload', [
+                'label' => 'Images',
+                'multiple' => true,
+                'name' => 'pictures',
+            ])
+        </div>
+
+
 
 
         @include('shared.switch', [

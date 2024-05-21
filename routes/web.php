@@ -3,7 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OptionController;
+use App\Http\Controllers\PictureController;
 use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,4 +42,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('property', PropertyController::class)->except(['index']);
     Route::resource('option', OptionController::class)->except(['show']);
     Route::resource('city', CityController::class)->except(['show']);
+
+    Route::delete('picture/{picture}', [PictureController::class, 'destroy'])->name('picture.destroy')->where([
+        'picture' => '[0-9]+'
+    ]);
 });
